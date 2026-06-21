@@ -1,0 +1,10 @@
+DB_USER=Flor
+DB_PASSWORD=tikita352001
+DB_SERVER=localhost
+DB_PORT=1433
+DB_NAME=HammerSubastas
+
+DATABASE_URL="sqlserver://localhost:1433;database=HammerSubastas;user=Flor;password=tikita352001;trustServerCertificate=true"
+
+MAIL_USER=subastas.hammer@gmail.com
+MAIL_PASS=nbdubommjtnflvkz

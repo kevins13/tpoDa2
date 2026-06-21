@@ -1,0 +1,12 @@
+node_modules/
+.expo/
+dist/
+build/
+.env
+.env.local
+front/.env
+backend/.env
+backend/node_modules/
+front/node_modules/
+.DS_Store
+*.log

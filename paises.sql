@@ -1,0 +1,16 @@
+INSERT INTO paises (numero, nombre, "nombreCorto", capital, nacionalidad, idiomas) VALUES
+(1,  'Argentina',          'ARG', 'Buenos Aires',    'argentina',    'Español'),
+(2,  'Bolivia',            'BOL', 'Sucre',           'boliviana',    'Español, Quechua, Aimara'),
+(3,  'Brasil',             'BRA', 'Brasilia',        'brasileña',    'Portugués'),
+(4,  'Chile',              'CHL', 'Santiago',        'chilena',      'Español'),
+(5,  'Colombia',           'COL', 'Bogotá',          'colombiana',   'Español'),
+(6,  'Ecuador',            'ECU', 'Quito',           'ecuatoriana',  'Español'),
+(7,  'Paraguay',           'PRY', 'Asunción',        'paraguaya',    'Español, Guaraní'),
+(8,  'Perú',               'PER', 'Lima',            'peruana',      'Español, Quechua'),
+(9,  'Uruguay',            'URY', 'Montevideo',      'uruguaya',     'Español'),
+(10, 'Venezuela',          'VEN', 'Caracas',         'venezolana',   'Español'),
+(11, 'México',             'MEX', 'Ciudad de México','mexicana',     'Español'),
+(12, 'España',             'ESP', 'Madrid',          'española',     'Español'),
+(13, 'Estados Unidos',     'USA', 'Washington D.C.', 'estadounidense','Inglés'),
+(14, 'Italia',             'ITA', 'Roma',            'italiana',     'Italiano'),
+(15, 'Francia',            'FRA', 'París',           'francesa',     'Francés');
