@@ -25,6 +25,7 @@ export const placeBid = async (req: AuthRequest, res: Response) => {
       where: { identificador: itemId },
       include: {
         pujos: true,
+        productos: true,
         catalogos: {
           include: {
             subastas: {
