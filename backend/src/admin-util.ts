@@ -142,6 +142,70 @@ async function main() {
     });
 
     console.log(`✅ ¡Artículo validado con éxito y subasta creada!`);
+  } else if (command === 'listar-pagos') {
+    const pendientes = await prisma.extra_metodosPago.findMany({
+      where: { estado: 'pendiente' },
+      include: { clientes: { include: { personas: true } } }
+    });
+
+    console.log(`\n📋 MEDIOS DE PAGO PENDIENTES DE VALIDACIÓN (${pendientes.length}):\n`);
+    for (const p of pendientes) {
+      console.log(`- ID Medio Pago: ${p.identificador} | Cliente ID: ${p.cliente} | Cliente: ${p.clientes.personas?.nombre} | Tipo: ${p.tipo} | Número: ${p.numero}`);
+    }
+    console.log();
+  } else if (command === 'validar-pago') {
+    const pagoIdStr = args[1];
+    if (!pagoIdStr) {
+      console.error('Por favor especifica el ID del medio de pago. Ej: npm run admin validar-pago 1');
+      process.exit(1);
+    }
+    const pagoId = parseInt(pagoIdStr, 10);
+    if (isNaN(pagoId)) {
+      console.error('El ID debe ser un número.');
+      process.exit(1);
+    }
+
+    const pago = await prisma.extra_metodosPago.findUnique({
+      where: { identificador: pagoId }
+    });
+
+    if (!pago) {
+      console.error(`❌ No se encontró ningún medio de pago con el ID: ${pagoId}`);
+      process.exit(1);
+    }
+
+    if (pago.estado === 'verificado') {
+      console.log(`⚠️ El medio de pago ya está verificado.`);
+      return;
+    }
+
+    console.log(`🔄 Validando medio de pago ID ${pagoId}...`);
+    
+    await prisma.extra_metodosPago.update({
+      where: { identificador: pagoId },
+      data: { estado: 'verificado' }
+    });
+
+    const userPaymentsCount = await prisma.extra_metodosPago.count({
+      where: { cliente: pago.cliente, estado: 'verificado' }
+    });
+
+    if (userPaymentsCount >= 3) {
+      console.log(`📈 El cliente ahora tiene ${userPaymentsCount} medios de pago verificados. Promocionando categoría a Plata...`);
+      await prisma.clientes.update({
+        where: { identificador: pago.cliente },
+        data: { categoria: 'plata' }
+      });
+    }
+
+    await prisma.notificaciones.create({
+      data: {
+        identificadorPersona: pago.cliente,
+        mensaje: `Tu medio de pago ${pago.tipo} finalizado en ${pago.numero.slice(-4)} ha sido verificado con éxito.`
+      }
+    });
+
+    console.log(`✅ ¡Medio de pago verificado con éxito!`);
   } else {
     console.log(`
 Uso de la herramienta de administración:
@@ -153,6 +217,10 @@ Uso de la herramienta de administración:
     npm run admin listar-articulos
   - Validar un artículo por su ID:
     npm run admin validar-articulo <id_articulo>
+  - Listar medios de pago pendientes de validación:
+    npm run admin listar-pagos
+  - Validar un medio de pago por su ID:
+    npm run admin validar-pago <id_pago>
 `);
   }
 }
